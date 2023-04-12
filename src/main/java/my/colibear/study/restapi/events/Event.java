@@ -1,5 +1,11 @@
 package my.colibear.study.restapi.events;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +16,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Entity
 @Builder
 @Getter
 @Setter
@@ -17,6 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -31,6 +39,7 @@ public class Event {
     private boolean offline;
     private boolean free;
     @Builder.Default
+    @Enumerated(value = EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
 
 }
