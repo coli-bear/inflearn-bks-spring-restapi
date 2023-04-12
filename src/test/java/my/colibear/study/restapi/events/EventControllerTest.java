@@ -12,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @ExtendWith(SpringExtension.class)
@@ -30,6 +30,9 @@ class EventControllerTest {
 
     @Test
     public void test() throws Exception {
+
+        // tdd 는 테스트케이스를 모두 만들고 진행한다.
+        // tdd 는 최소 3가지 테스트 케이스를 이용해서 테스트를 진행한다.
 
         // given
         Event event = Event.builder()
@@ -48,6 +51,9 @@ class EventControllerTest {
         // when
         when(eventRepository.save(event)).thenReturn(event);
 
+        // then
+        then(event.getEventStatus()).isEqualTo(EventStatus.DRAFT);
+
         mockMvc.perform(
                 post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -58,8 +64,9 @@ class EventControllerTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").exists())
             .andExpect(jsonPath("$.id").value(1L))
+            .andExpect(header().exists("Location"))
+            .andExpect(header().string("Content-Type", "application/json"))
         ;
-        // then
 
     }
 
