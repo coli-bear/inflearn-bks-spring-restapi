@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Event {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

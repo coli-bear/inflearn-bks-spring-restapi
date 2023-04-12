@@ -1,5 +1,6 @@
 package my.colibear.study.restapi.events;
 
+import my.colibear.study.restapi.events.mapper.EventMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class EventController {
 
     private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
 
-    public EventController(EventRepository eventRepository) {
+    public EventController(EventRepository eventRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
+        this.eventMapper = eventMapper;
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@RequestBody Event event) {
+    public ResponseEntity createEvent(@RequestBody EventDto eventDto) {
+
+        Event event = eventMapper.toEvent(eventDto);
         eventRepository.save(event);
 
         URI createdUri = linkTo(EventController.class).slash(event.getId()).toUri();

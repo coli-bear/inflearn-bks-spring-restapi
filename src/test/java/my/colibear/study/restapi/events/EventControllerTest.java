@@ -1,10 +1,14 @@
 package my.colibear.study.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import my.colibear.study.restapi.events.mapper.EventMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -13,20 +17,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
-    EventRepository eventRepository;
 
     @Test
     public void test() throws Exception {
@@ -46,11 +50,9 @@ class EventControllerTest {
             .maxPrice(200)
             .limitOfEnrollment(100)
             .location("강남역 D2 Start up factory")
-            .id(1L)
+            .id(1000L)
+            .free(false)
             .build();
-        // when
-        when(eventRepository.save(event)).thenReturn(event);
-
         // then
         then(event.getEventStatus()).isEqualTo(EventStatus.DRAFT);
 
@@ -63,7 +65,9 @@ class EventControllerTest {
             .andDo(print())
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").exists())
-            .andExpect(jsonPath("$.id").value(1L))
+            .andExpect(jsonPath("id").value(not(1000)))
+            .andExpect(jsonPath("free").value(not(true)))
+            .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT))
             .andExpect(header().exists("Location"))
             .andExpect(header().string("Content-Type", "application/json"))
         ;
