@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -47,7 +46,7 @@ class EventControllerTest {
             .location("강남역 D2 Start up factory")
             .build();
 
-        mockMvc.perform(
+        this.mockMvc.perform(
                 post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
@@ -92,7 +91,7 @@ class EventControllerTest {
 
 //        then(event.getEventStatus()).isEqualTo(EventStatus.DRAFT);
 
-        mockMvc.perform(
+        this.mockMvc.perform(
                 post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
@@ -104,5 +103,17 @@ class EventControllerTest {
 
     }
 
+    @Test
+    public void createEvent_BadRequest_EmptyInput() throws Exception {
+        EventDto eventDto = EventDto.builder()
+            .build();
 
+        this.mockMvc.perform(
+            post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(eventDto))
+                )
+            .andExpect(status().isBadRequest());
+    }
 }
