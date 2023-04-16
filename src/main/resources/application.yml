@@ -1,0 +1,5 @@
+# unknown properties ? json ? ???? ????? ??
+spring:
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true

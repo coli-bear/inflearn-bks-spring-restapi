@@ -34,7 +34,7 @@ class EventControllerTest {
         // tdd 는 최소 3가지 테스트 케이스를 이용해서 테스트를 진행한다.
 
         // given
-        Event event = Event.builder()
+        EventDto event = EventDto.builder()
             .name("spring")
             .description("RestAPI Development with Spring")
             .beginEnrollmentDateTime(LocalDateTime.of(2023, 4, 12, 14, 00))
@@ -45,12 +45,7 @@ class EventControllerTest {
             .maxPrice(200)
             .limitOfEnrollment(100)
             .location("강남역 D2 Start up factory")
-            .id(1000L)
-            .free(false)
             .build();
-        // then
-
-//        then(event.getEventStatus()).isEqualTo(EventStatus.DRAFT);
 
         mockMvc.perform(
                 post("/api/events")
@@ -70,5 +65,44 @@ class EventControllerTest {
         ;
 
     }
+
+    @Test
+    public void createFail_BadRequest() throws Exception {
+
+        // tdd 는 테스트케이스를 모두 만들고 진행한다.
+        // tdd 는 최소 3가지 테스트 케이스를 이용해서 테스트를 진행한다.
+
+        // given
+        Event event = Event.builder()
+            .name("spring")
+            .description("RestAPI Development with Spring")
+            .beginEnrollmentDateTime(LocalDateTime.of(2023, 4, 12, 14, 00))
+            .closeEnrollmentDateTime(LocalDateTime.of(2023, 4, 13, 14, 00))
+            .beginEventDateTime(LocalDateTime.of(2023, 4, 15, 14, 0))
+            .endEventDateTime(LocalDateTime.of(2023, 4, 15, 18, 0))
+            .basePrice(100)
+            .maxPrice(200)
+            .limitOfEnrollment(100)
+            .location("강남역 D2 Start up factory")
+            .free(true)
+            .offline(false)
+            .eventStatus(EventStatus.PUBLISHED)
+            .build();
+        // then
+
+//        then(event.getEventStatus()).isEqualTo(EventStatus.DRAFT);
+
+        mockMvc.perform(
+                post("/api/events")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(event))
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+        ;
+
+    }
+
 
 }
