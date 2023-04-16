@@ -17,6 +17,7 @@ import org.springframework.validation.Errors;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +64,8 @@ class EventControllerTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("id").exists())
             .andExpect(jsonPath("id").value(not(1000)))
-            .andExpect(jsonPath("free").value(not(true)))
+            .andExpect(jsonPath("free").value(false))
+            .andExpect(jsonPath("offline").value(true))
             .andExpect(header().exists("Location"))
             .andExpect(header().string("Content-Type", "application/json"))
         ;
@@ -162,10 +164,11 @@ class EventControllerTest {
             .andExpect(jsonPath("$.[0].objectName").exists())
             .andExpect(jsonPath("$.[0].defaultMessage").exists())
             .andExpect(jsonPath("$.[0].code").exists())
-            // field 에러가 없는 경우에는 에러가 발생할 수 있다.
-            // 따라서 나중을 위해 잠시 주석 처리..... 이 부분 해결하는 방법에 대해서 고민해봐야지
+        // field 에러가 없는 경우에는 에러가 발생할 수 있다.
+        // 따라서 나중을 위해 잠시 주석 처리..... 이 부분 해결하는 방법에 대해서 고민해봐야지
 //            .andExpect(jsonPath("$.[0].field").exists())
 //            .andExpect(jsonPath("$.[0].rejectedValue").exists())
         ;
     }
+
 }
