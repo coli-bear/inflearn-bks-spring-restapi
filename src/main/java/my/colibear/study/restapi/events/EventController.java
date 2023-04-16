@@ -3,16 +3,16 @@ package my.colibear.study.restapi.events;
 import my.colibear.study.restapi.events.mapper.EventMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/events", produces = MediaType.APPLICATION_JSON_VALUE)
 public class EventController {
 
@@ -25,7 +25,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@RequestBody EventDto eventDto) {
+    public ResponseEntity<Event> createEvent(@RequestBody EventDto eventDto) {
 
         Event event = eventMapper.toEvent(eventDto);
         eventRepository.save(event);

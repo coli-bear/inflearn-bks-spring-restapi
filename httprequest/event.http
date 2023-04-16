@@ -1,0 +1,21 @@
+### create event
+POST http://localhost:8080/api/events
+Content-Type: application/json
+Accept: application/json
+
+{
+    "id":1000,
+    "name":"spring",
+    "description":"RestAPI Development with Spring",
+    "beginEnrollmentDateTime":"2023-04-12T14:00:00",
+    "closeEnrollmentDateTime":"2023-04-13T14:00:00",
+    "beginEventDateTime":"2023-04-15T14:00:00",
+    "endEventDateTime":"2023-04-15T18:00:00",
+    "location":"강남역 D2 Start up factory",
+    "basePrice":100,
+    "maxPrice":200,
+    "limitOfEnrollment":100,
+    "offline":false,
+    "free":false,
+    "eventStatus":"DRAFT"
+}

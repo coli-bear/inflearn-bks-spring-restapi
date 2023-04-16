@@ -28,12 +28,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+//    compileOnly 'org.postgresql:postgresql'
+    implementation 'com.h2database:h2'
 
     compileOnly 'org.projectlombok:lombok'
-    implementation 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+
+    compileOnly 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     testImplementation 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
