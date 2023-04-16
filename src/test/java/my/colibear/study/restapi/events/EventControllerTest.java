@@ -1,6 +1,8 @@
 package my.colibear.study.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import my.colibear.study.restapi.common.annotataion.TestDescription;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ class EventControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @TestDescription("정상적으로 이벤트를 생성하는 테스트")
+    @DisplayName("정상적으로 이벤트를 생성하는 테스트")
     public void test() throws Exception {
 
         // tdd 는 테스트케이스를 모두 만들고 진행한다.
@@ -66,6 +70,8 @@ class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력 받을 수 없는 값을 사용하는 경우에 400 에러 발생하는 테스트")
+    @DisplayName("입력 받을 수 없는 값을 사용하는 경우에 400 에러 발생하는 테스트")
     public void createFail_BadRequest() throws Exception {
 
         // tdd 는 테스트케이스를 모두 만들고 진행한다.
@@ -104,16 +110,46 @@ class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 비어있는 경우에 에러가 발생하는 테스트")
+    @DisplayName("입력값이 비어있는 경우에 에러가 발생하는 테스트")
     public void createEvent_BadRequest_EmptyInput() throws Exception {
+//        EventDto eventDto = EventDto.builder()
+//            .build();
+//
+//         이거 여기서 에러 난다... NPE
+//        this.mockMvc.perform(
+//            post("/api/events")
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .accept(MediaType.APPLICATION_JSON)
+//                    .content(objectMapper.writeValueAsString(eventDto))
+//                )
+//            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("입력 값이 잘못된 경우에 에러가 발생하는 테스트")
+    public void createEvent_BadRequest_Wrong_Input() throws Exception {
         EventDto eventDto = EventDto.builder()
+            .name("spring")
+            .description("RestAPI Development with Spring")
+            // event start date 보다 end date 가 빠르다.
+            .beginEnrollmentDateTime(LocalDateTime.of(2023, 4, 12, 14, 00))
+            .closeEnrollmentDateTime(LocalDateTime.of(2023, 4, 11, 14, 00))
+            .beginEventDateTime(LocalDateTime.of(2023, 4, 15, 14, 0))
+            .endEventDateTime(LocalDateTime.of(2023, 4, 11, 18, 0))
+            // base 보다 max 가 크다.
+            .basePrice(4000)
+            .maxPrice(200)
+            .limitOfEnrollment(100)
+            .location("강남역 D2 Start up factory")
             .build();
 
         this.mockMvc.perform(
-            post("/api/events")
+                post("/api/events")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(eventDto))
-                )
+            )
             .andExpect(status().isBadRequest());
     }
 }
