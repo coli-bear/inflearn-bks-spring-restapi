@@ -26,12 +26,13 @@ public class EventController {
     private final MyEventValidator myEventValidator;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
+    public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
         // case 1:
         myEventValidator.validate(eventDto, errors);
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                .body(errors);
         }
 
 

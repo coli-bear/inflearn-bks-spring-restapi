@@ -2,6 +2,7 @@ package my.colibear.study.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import my.colibear.study.restapi.common.annotataion.TestDescription;
+import my.colibear.study.restapi.common.serializer.ErrorsSerializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.Errors;
 
 import java.time.LocalDateTime;
 
@@ -61,8 +64,6 @@ class EventControllerTest {
             .andExpect(jsonPath("id").exists())
             .andExpect(jsonPath("id").value(not(1000)))
             .andExpect(jsonPath("free").value(not(true)))
-//            .andExpect(jsonPath("$.eventStatus").value(equalTo(EventStatus.DRAFT))) // 왜 <> 가 들어가는지 모르겠네...?
-//            .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT))
             .andExpect(header().exists("Location"))
             .andExpect(header().string("Content-Type", "application/json"))
         ;
@@ -150,6 +151,21 @@ class EventControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(eventDto))
             )
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            // 아래 정보는 errors 에 들어있다.
+            /**
+             * 기본적으로 spring boot 의 Errors 는 Java Bean 표준을 준수한 객체가 아니라 객체의 Serialization 을 하지 않는다.
+             * 따라서, Errors 객체를 ${@link EventController#createEvent(EventDto, Errors)} 에서 ${@link ResponseEntity#body()} 에 데이터를 담을 수 없다.
+             * 해결 방법은 ${@link ErrorsSerializer} 를 구현하면 아래의 내용이 처리 가능하다.
+             */
+
+            .andExpect(jsonPath("$.[0].objectName").exists())
+            .andExpect(jsonPath("$.[0].defaultMessage").exists())
+            .andExpect(jsonPath("$.[0].code").exists())
+            // field 에러가 없는 경우에는 에러가 발생할 수 있다.
+            // 따라서 나중을 위해 잠시 주석 처리..... 이 부분 해결하는 방법에 대해서 고민해봐야지
+//            .andExpect(jsonPath("$.[0].field").exists())
+//            .andExpect(jsonPath("$.[0].rejectedValue").exists())
+        ;
     }
 }
