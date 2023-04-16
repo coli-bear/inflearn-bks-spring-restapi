@@ -68,6 +68,17 @@ class EventControllerTest {
             .andExpect(jsonPath("offline").value(true))
             .andExpect(header().exists("Location"))
             .andExpect(header().string("Content-Type", "application/json"))
+            .andExpect(jsonPath("_links.self").exists())
+
+            // 아래는 hateoas 를 이용한 restful 한 API 개발 이다.
+            // ResourceSupport 를 이용해서 한다.
+            // 이벤트 목록
+            .andExpect(jsonPath("_links.self").exists())
+            // query event
+            .andExpect(jsonPath("_links.query-events").exists())
+            // update event
+            .andExpect(jsonPath("_links.update-event").exists())
+//            .andExpect(jsonPath("_links.profile").exists())
         ;
 
     }
