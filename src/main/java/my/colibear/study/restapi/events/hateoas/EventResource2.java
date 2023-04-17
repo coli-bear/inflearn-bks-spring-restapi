@@ -11,6 +11,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class EventResource2 extends EntityModel<Event> {
     public EventResource2(Event event) {
         super(event);
+        add(linkTo(EventController.class).slash(event.getId()).withSelfRel());
     }
 
     public EventResource2(Event event, Link... links) {

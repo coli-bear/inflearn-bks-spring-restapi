@@ -3,6 +3,7 @@ package my.colibear.study.restapi.common.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import my.colibear.study.restapi.common.resource.ErrorResource;
 import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.validation.Errors;
 
