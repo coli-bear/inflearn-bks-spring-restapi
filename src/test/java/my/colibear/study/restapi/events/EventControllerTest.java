@@ -1,14 +1,18 @@
 package my.colibear.study.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import my.colibear.study.restapi.common.RestDocsConfiguration;
 import my.colibear.study.restapi.common.annotataion.TestDescription;
 import my.colibear.study.restapi.common.serializer.ErrorsSerializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,14 +21,20 @@ import org.springframework.validation.Errors;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.not;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class
+)
 @ExtendWith(SpringExtension.class)
 class EventControllerTest {
     @Autowired
@@ -78,6 +88,60 @@ class EventControllerTest {
             .andExpect(jsonPath("_links.query-events").exists())
             // update event
             .andExpect(jsonPath("_links.update-event").exists())
+            // 응답 문서화
+            .andDo(
+                // 문서 이름
+                document("create event",
+//                    links( // 링크 문서화
+//                        linkWithRel("self").description("link to self"),
+//                        linkWithRel("query-events").description("link to query events"),
+//                        linkWithRel("update-event").description("link to update an existing event")
+//                    ),
+                    requestHeaders( // 요청 헤더 문서화
+                        headerWithName(HttpHeaders.HOST).description("origin host header"),
+                        headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                        headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header"),
+                        headerWithName(HttpHeaders.CONTENT_LENGTH).description("content length header")
+
+                    ),
+                    requestFields( // 요청 body 문서화
+                        fieldWithPath("name").description("Name of new event"),
+                        fieldWithPath("description").description("description of new event"),
+                        fieldWithPath("beginEnrollmentDateTime").description("new event begin enrollment date time"),
+                        fieldWithPath("closeEnrollmentDateTime").description("new event close enrollment date time"),
+                        fieldWithPath("beginEventDateTime").description("new event begin date time"),
+                        fieldWithPath("endEventDateTime").description("new event end date time"),
+                        fieldWithPath("location").description("new event meeting place"),
+                        fieldWithPath("basePrice").description("new event base price"),
+                        fieldWithPath("maxPrice").description("new event max price"),
+                        fieldWithPath("limitOfEnrollment").description("new event limit of enrollment")
+                    ),
+                    responseHeaders( // 응답 헤더 문서화
+                        headerWithName(HttpHeaders.LOCATION).description("created entity url header"),
+                        headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header"),
+                        headerWithName(HttpHeaders.CONTENT_LENGTH).description("content length header")
+                    ),
+                    responseFields( // 응답 body 문서화
+                        fieldWithPath("id").description(""),
+                        fieldWithPath("name").description("Name of new event"),
+                        fieldWithPath("description").description("description of new event"),
+                        fieldWithPath("beginEnrollmentDateTime").description("new event begin enrollment date time"),
+                        fieldWithPath("closeEnrollmentDateTime").description("new event close enrollment date time"),
+                        fieldWithPath("beginEventDateTime").description("new event begin date time"),
+                        fieldWithPath("endEventDateTime").description("new event end date time"),
+                        fieldWithPath("location").description("new event meeting place"),
+                        fieldWithPath("basePrice").description("new event base price"),
+                        fieldWithPath("maxPrice").description("new event max price"),
+                        fieldWithPath("limitOfEnrollment").description("new event limit of enrollment"),
+                        fieldWithPath("offline").description("offline encounter flag"),
+                        fieldWithPath("free").description("is free meeting flag"),
+                        fieldWithPath("eventStatus").description("event status"),
+                        fieldWithPath("_links.self.href").description("link to self"),
+                        fieldWithPath("_links.query-events.href").description("link to query events"),
+                        fieldWithPath("_links.update-event.href").description("link to update event")
+                    )
+
+                ))
 //            .andExpect(jsonPath("_links.profile").exists())
         ;
 
