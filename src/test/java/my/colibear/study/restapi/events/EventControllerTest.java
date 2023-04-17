@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.Errors;
@@ -122,23 +123,23 @@ class EventControllerTest {
                         headerWithName(HttpHeaders.CONTENT_LENGTH).description("content length header")
                     ),
                     responseFields( // 응답 body 문서화
-                        fieldWithPath("id").description(""),
-                        fieldWithPath("name").description("Name of new event"),
-                        fieldWithPath("description").description("description of new event"),
-                        fieldWithPath("beginEnrollmentDateTime").description("new event begin enrollment date time"),
-                        fieldWithPath("closeEnrollmentDateTime").description("new event close enrollment date time"),
-                        fieldWithPath("beginEventDateTime").description("new event begin date time"),
-                        fieldWithPath("endEventDateTime").description("new event end date time"),
-                        fieldWithPath("location").description("new event meeting place"),
-                        fieldWithPath("basePrice").description("new event base price"),
-                        fieldWithPath("maxPrice").description("new event max price"),
-                        fieldWithPath("limitOfEnrollment").description("new event limit of enrollment"),
-                        fieldWithPath("offline").description("offline encounter flag"),
-                        fieldWithPath("free").description("is free meeting flag"),
-                        fieldWithPath("eventStatus").description("event status"),
-                        fieldWithPath("_links.self.href").description("link to self"),
-                        fieldWithPath("_links.query-events.href").description("link to query events"),
-                        fieldWithPath("_links.update-event.href").description("link to update event")
+                        fieldWithPath("id").type(JsonFieldType.NUMBER).description(""),
+                        fieldWithPath("name").type(JsonFieldType.STRING).description("Name of new event"),
+                        fieldWithPath("description").type(JsonFieldType.STRING).description("description of new event"),
+                        fieldWithPath("beginEnrollmentDateTime").type(JsonFieldType.STRING).description("new event begin enrollment date time"),
+                        fieldWithPath("closeEnrollmentDateTime").type(JsonFieldType.STRING).description("new event close enrollment date time"),
+                        fieldWithPath("beginEventDateTime").type(JsonFieldType.STRING).description("new event begin date time"),
+                        fieldWithPath("endEventDateTime").type(JsonFieldType.STRING).description("new event end date time"),
+                        fieldWithPath("location").type(JsonFieldType.STRING).description("new event meeting place"),
+                        fieldWithPath("basePrice").type(JsonFieldType.NUMBER).description("new event base price"),
+                        fieldWithPath("maxPrice").type(JsonFieldType.NUMBER).description("new event max price"),
+                        fieldWithPath("limitOfEnrollment").type(JsonFieldType.NUMBER).description("new event limit of enrollment"),
+                        fieldWithPath("offline").type(JsonFieldType.BOOLEAN).description("offline encounter flag"),
+                        fieldWithPath("free").type(JsonFieldType.BOOLEAN).description("is free meeting flag"),
+                        fieldWithPath("eventStatus").type(JsonFieldType.STRING).description("event status"),
+                        fieldWithPath("_links.self.href").type(JsonFieldType.STRING).description("link to self"),
+                        fieldWithPath("_links.query-events.href").type(JsonFieldType.STRING).description("link to query events"),
+                        fieldWithPath("_links.update-event.href").type(JsonFieldType.STRING).description("link to update event")
                     )
 
                 ))

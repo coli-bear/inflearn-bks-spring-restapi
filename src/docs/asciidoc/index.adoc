@@ -1,0 +1,25 @@
+= Natural REST API Guide
+백기선;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:operation-curl-request-title: Example request
+:operation-http-response-title: Example response
+
+[[resources]]
+= 리소스
+
+[[resources-index]]
+== 인덱스
+
+인덱스는 서비스 진입점을 제공한다.
+
+[[resources-events-create]]
+=== 이벤트 생성
+
+`POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
+
+operation::create-event[snippets='curl-request,http-request,http-response']
