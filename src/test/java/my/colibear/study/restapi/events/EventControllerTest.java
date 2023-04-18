@@ -1,25 +1,16 @@
 package my.colibear.study.restapi.events;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import my.colibear.study.restapi.common.RestDocsConfiguration;
+import my.colibear.study.restapi.BaseControllerTest;
 import my.colibear.study.restapi.common.annotataion.TestDescription;
 import my.colibear.study.restapi.common.serializer.ErrorsSerializer;
 import my.colibear.study.restapi.events.mapper.EventMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.Errors;
 
 import java.time.LocalDateTime;
@@ -33,17 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocsConfiguration.class)
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-class EventControllerTest {
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
+class EventControllerTest extends BaseControllerTest {
+
     @Autowired
     EventRepository eventRepository;
     @Autowired
